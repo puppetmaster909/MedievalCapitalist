@@ -6,16 +6,14 @@ public class GameManager : MonoBehaviour
 {
     #region Inspector Fields
 
-
+    public int Money = 0;
 
     #endregion
 
     #region RuntimeFields
 
-    public int Money = 0;
-
-    [Space(10)]
-    public float IncreaseMoneyBy = 1;
+    [HideInInspector]
+    public int MeatLevel = 0;
 
     #endregion
 
@@ -48,7 +46,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+       
     }
 
     #endregion
