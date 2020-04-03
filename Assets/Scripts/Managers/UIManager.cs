@@ -28,7 +28,8 @@ public class UIManager : MonoBehaviour
 
     #region Runtime Fields
 
-
+    [HideInInspector]
+    public int PreviousScreenID;
 
     #endregion
 
@@ -92,6 +93,7 @@ public class UIManager : MonoBehaviour
 
         screens[CurrentScreenID].screen.SetActive(false);
         screens[index].screen.SetActive(true);
+        PreviousScreenID = CurrentScreenID;
         CurrentScreenID = index;
     }
 
@@ -106,6 +108,20 @@ public class UIManager : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("Quitting Game");
+    }
+
+    // Pauses game
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        ShowScreen("Pause");
+    }
+
+    // Unpauses game
+    public void UnPause(string screenName)
+    {
+        Time.timeScale = 1;
+        ShowScreen(screens[PreviousScreenID].name);
     }
 
     #endregion

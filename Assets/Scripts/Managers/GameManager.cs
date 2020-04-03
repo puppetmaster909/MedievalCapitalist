@@ -4,16 +4,39 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Data Types
+
+    public enum ResourceType
+    {
+        Meat,
+        Fletching,
+        Smithing,
+        Textiles,
+        Potions,
+        Gems
+    }
+
+    [System.Serializable]
+    public struct Resource
+    {
+        public ResourceType name;
+        public int level;
+        public bool isActive;
+    }
+
+    #endregion
+
     #region Inspector Fields
 
     public int Money = 0;
 
+    public int MaxStatLevel = 3;
+
+    public Resource[] Resources;
+
     #endregion
 
     #region RuntimeFields
-
-    [HideInInspector]
-    public int MeatLevel = 0;
 
     #endregion
 

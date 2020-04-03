@@ -110,5 +110,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790844d2cc887e441962a8067c88a19b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Money: 0
-  MeatLevel: 0
+  Money: 10
+  MaxStatLevel: 2
+  Resources:
+  - name: 0
+    level: 0
+    isActive: 1
+  - name: 1
+    level: 0
+    isActive: 0
+  - name: 2
+    level: 0
+    isActive: 0
+  - name: 3
+    level: 0
+    isActive: 0
+  - name: 4
+    level: 0
+    isActive: 0
+  - name: 5
+    level: 0
+    isActive: 0

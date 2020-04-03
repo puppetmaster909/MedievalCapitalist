@@ -1,78 +1,87 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class GameHUD : MonoBehaviour
 {
-    #region Structs
+    #region Static Members
 
-    [System.Serializable]
-    public struct UpgradeCategory
-    {
-        public int level;
-        public int cost;
-        public int moneyPerCycle;
-        public float cycleTime;
-    }
+    public static GameHUD main;
 
     #endregion
 
     #region Inspector Fields
 
-    public Text MoneyText;
+    public GameObject[] ResourceObjects;
+
+    public Slider TimeScaleSlider;
+    public Text TimeScaleText;
 
     [Space(20)]
-    public Sprite[] MeatIcons;
-    
-    [Space(20)]
-    public UpgradeCategory[] MeatStats;
-
-    [Space(20)]
-    public Image MeatButtonImage;
-
-    [Space(20)]
-    public Slider MeatProgressBar;
+    public GameObject Day;
+    public GameObject Evening;
+    public GameObject Night;
 
     #endregion
 
     #region Runtime Fields
 
-    private int MeatLevel;
-    private float MeatTimer;
-    private float MeatCycleTime;
+    private System.DateTime DateTime;
 
     #endregion
 
     #region Monobehavior
 
+    private void Awake()
+    {
+        if (main == null)
+        {
+            main = this;
+        }
+        else
+        {
+            GameObject.Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        MoneyText.text = GameManager.main.Money.ToString();
+        // Activates 
+        for (int i = 0; i < ResourceObjects.Length; i++)
+        {
+            ResourceObjects[i].SetActive(GameManager.main.Resources[i].isActive);
+        }
 
-        MeatLevel = GameManager.main.MeatLevel;
-        MeatTimer = MeatStats[MeatLevel].cycleTime;   
+        UpdateTimeScale();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Cost: " + MeatStats[MeatLevel + 1].cost.ToString());
+        DateTime = System.DateTime.Now;
 
-        if (MeatLevel > 0)
+        if (DateTime.Hour < 16)
         {
-            // Timers
-            MeatTimer += Time.deltaTime;
-            MeatProgressBar.value = MeatTimer / MeatCycleTime;
-
-            // Adds money if timer is finished
-            if (MeatTimer > MeatStats[MeatLevel].cycleTime)
-            {
-                MeatTimer -= MeatStats[MeatLevel].cycleTime;
-                GameManager.main.Money += MeatStats[MeatLevel].moneyPerCycle;
-                MoneyText.text = GameManager.main.Money.ToString();
-            }
+            // Show day image
+            Day.SetActive(true);
+            Evening.SetActive(false);
+            Night.SetActive(false);
+        }
+        else if (DateTime.Hour >= 16 && DateTime.Hour <= 19)
+        {
+            // Show evening image
+            Day.SetActive(false);
+            Evening.SetActive(true);
+            Night.SetActive(false);
+        }
+        else
+        {
+            // Show night image
+            Day.SetActive(false);
+            Evening.SetActive(false);
+            Night.SetActive(true);
         }
     }
 
@@ -80,21 +89,10 @@ public class GameHUD : MonoBehaviour
 
     #region Public Methods
 
-    public void UpgradeMeat()
+    public void UpdateTimeScale()
     {
-        if (GameManager.main.Money >= MeatStats[MeatLevel + 1].cost)
-        {
-            MeatLevel = MeatLevel + 1;
-            GameManager.main.MeatLevel = MeatLevel;
-
-            Debug.Log("New Meat Level: " + MeatLevel.ToString());
-
-            GameManager.main.Money -= MeatStats[MeatLevel].cost;
-            MoneyText.text = GameManager.main.Money.ToString();
-            MeatCycleTime = MeatStats[MeatLevel].cycleTime;
-            MeatButtonImage.sprite = MeatIcons[MeatLevel];
-            MeatTimer = 0;
-        }
+        Time.timeScale = TimeScaleSlider.value;
+        TimeScaleText.text = "Time Scale: " + TimeScaleSlider.value.ToString("F2");
     }
 
     #endregion
