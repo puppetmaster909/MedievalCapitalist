@@ -27,9 +27,9 @@ public class ResourceGenerator : MonoBehaviour
 
     [Space(20)]
     public Sprite[] ResourceIcons;
-    
+
     [Space(20)]
-    public UpgradeStats[] Stats;
+    public UpgradeStats Level1Stats;
 
     [Space(20)]
     public Text ResourceLevelText;
@@ -40,9 +40,15 @@ public class ResourceGenerator : MonoBehaviour
     [Space(10)]
     public Slider ResourceProgressBar;
 
+    [Space(10)]
+    public Text CostText;
+
     #endregion
 
     #region Runtime Fields
+
+    [HideInInspector]
+    public UpgradeStats[] Stats;
 
     private int ResourceID;
     private int ResourceLevel;
@@ -76,10 +82,16 @@ public class ResourceGenerator : MonoBehaviour
 
         // Setup variables
         MoneyText.text = GameManager.main.Money.ToString();
+
+        SetupLevels();
+
         ResourceLevel = GameManager.main.Resources[ResourceID].level;
         ResourceTimer = Stats[ResourceLevel].cycleTime;
-
+        ResourceButtonImage.sprite = ResourceIcons[ResourceLevel];
         ResourceLevelText.text = "Lv. " + ResourceLevel.ToString();
+        CostText.text = Stats[ResourceLevel + 1].cost.ToString();
+
+        //gameObject.SetActive(GameManager.main.Resources[ResourceID].isActive);
 
         MaxStatLevel = GameManager.main.MaxStatLevel;
     }
@@ -131,19 +143,61 @@ public class ResourceGenerator : MonoBehaviour
                 if (ResourceLevel == MaxStatLevel)
                 {
                     ResourceLevelText.text = "MAX";
+                    CostText.text = "MAXED OUT";
                 }
                 else
                 {
                     ResourceLevelText.text = "Lv. " + ResourceLevel.ToString();
+                    CostText.text = Stats[ResourceLevel + 1].cost.ToString();
                 }
 
                 // Activate next resource if this has been upgraded once
-                if (ResourceLevel == 1 && ResourceID + 1 <= GameManager.main.Resources.Length)
+                if (ResourceLevel == 1 && ResourceID + 1 <= GameManager.main.Resources.Length - 1)
                 {
                     GameHUD.main.ResourceObjects[ResourceID + 1].SetActive(true);
                     GameManager.main.Resources[ResourceID + 1].isActive = true;
                 }
             }
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void SetupLevels()
+    {
+        Stats = new UpgradeStats[GameManager.main.MaxStatLevel + 1];
+
+        // Level 0
+        Stats[0].level = 0;
+        Stats[0].cost = 0;
+        Stats[0].moneyPerCycle = 0;
+        Stats[0].cycleTime = 0;
+
+        // Level 1
+        Stats[1].level = Level1Stats.level;
+        Stats[1].cost = Level1Stats.cost;
+        Stats[1].moneyPerCycle = Level1Stats.moneyPerCycle;
+        Stats[1].cycleTime = Level1Stats.cycleTime;
+
+        // Calculate other stat levels from here
+        for (int i = 2; i < 13; i++)
+        {
+            Stats[i].level = i;
+            Stats[i].cost = (Stats[1].cost) * (int)(Mathf.Exp((float)i / 8) * 20);
+            Stats[i].moneyPerCycle = (Stats[1].moneyPerCycle) * (int)(Mathf.Exp((float)i / 10) * 10);
+            Stats[i].cycleTime = (float)(Stats[i - 1].cycleTime * .8);
+
+            if (ResourceType == GameManager.ResourceType.Meat)
+            {
+                Debug.Log("Level: " + Stats[i].level);
+                Debug.Log("Cost: " + Stats[i].cost);
+                Debug.Log("Value: " + Stats[i].moneyPerCycle);
+                Debug.Log("Time: " + Stats[i].cycleTime);
+                Debug.Log("");
+            }
+
         }
     }
 

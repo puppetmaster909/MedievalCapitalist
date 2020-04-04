@@ -124,6 +124,23 @@ public class UIManager : MonoBehaviour
         ShowScreen(screens[PreviousScreenID].name);
     }
 
+    // Reset game progress
+    /*public void ResetProgress()
+    {
+        for (int i = 0; i < GameManager.main.Resources.Length; i++)
+        {
+            GameManager.main.Resources[i].level = 0;
+            GameManager.main.Resources[i].isActive = false;
+            if (GameManager.main.Resources[i].name == GameManager.ResourceType.Meat)
+            {
+                GameManager.main.Resources[i].isActive = true;
+            }
+            PlayerPrefs.SetInt("ResourceID " + i + " Level", 0);
+            PlayerPrefs.SetInt("IsActive " + i , 0);
+        }
+        GameManager.main.Money = 10;
+    }*/
+
     #endregion
 
     #region Private Methods
