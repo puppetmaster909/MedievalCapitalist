@@ -774,9 +774,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9f713d289b7e54a43ba968888edb1438, type: 3}
   Level1Stats:
     level: 1
-    cost: 5
-    moneyPerCycle: 1
-    cycleTime: 5
+    cost: 100
+    moneyPerCycle: 60
+    cycleTime: 40
   ResourceLevelText: {fileID: 730229814435395579}
   ResourceButtonImage: {fileID: 6725496367764670830}
   ResourceProgressBar: {fileID: 5937330204701156633}
