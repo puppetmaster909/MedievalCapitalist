@@ -70,5 +70,10 @@ public class MainMenu : MonoBehaviour
         UIManager.main.Quit();
     }
 
+    /*public void ResetGame()
+    {
+        UIManager.main.ResetProgress();
+    }*/
+
     #endregion
 }

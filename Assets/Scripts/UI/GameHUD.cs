@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameHUD : MonoBehaviour
@@ -93,6 +94,17 @@ public class GameHUD : MonoBehaviour
     {
         Time.timeScale = TimeScaleSlider.value;
         TimeScaleText.text = "Time Scale: " + TimeScaleSlider.value.ToString("F2");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+        Debug.Log("Quitting Game");
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     #endregion
